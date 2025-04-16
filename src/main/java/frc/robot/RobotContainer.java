@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem DriveSubsystem = new DriveSubsystem();
+  private final DriveSubsystem m_drive = new DriveSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -30,7 +30,9 @@ public class RobotContainer {
 
   
   private void configureBindings() {
-
+    m_drive.setDefaultCommand(
+        ArcadeDrive(
+            m_drive, () -> -m_driverController.getLeftY(), () -> -m_drivercontroller.getRightX()));
   }
 
 

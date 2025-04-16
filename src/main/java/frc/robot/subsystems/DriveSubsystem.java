@@ -21,6 +21,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final SparkMax m_rightFollower =  new SparkMax(34, MotorType.kBrushless);
   private final RelativeEncoder leftEncoder = m_leftLeader.getEncoder();
   private final RelativeEncoder rightEncoder = m_rightLeader.getEncoder();
+  private final SparkClosedLoopController leftController = leftLeader.getClosedLoopController();
+  private final SparkClosedLoopController rightController = rightLeader.getClosedLoopController();
 
   public DriveSubsystem() {
     
@@ -49,8 +51,21 @@ public class DriveSubsystem extends SubsystemBase {
     
   }
 
+  public void setVoltage(double leftVolts, double rightVolts) {
+    leftLeader.setVoltage(leftVolts);
+    rightLeader.setVoltage(rightVolts);
+  }
+
+  public void setVelocity(double leftRadPerSec, double rightRadPerSec, double leftFFVolts, double rightFFVolts) {
+    leftController.setReference(leftRadPerSec, ControlType.kVelocity, ClosedLoopSlot.kSlot0, leftFFVolts);
+    rightController.setReference(rightRadPerSec, ControlType.kVelocity, ClosedLoopSlot.kSlot0, rightFFVolts);
+  }
+  
   public void runOpenLoop(double leftVolts, double rightVolts) {
-    m_leftLeader.setVoltage(leftVolts);
-    m_rightLeader.setVoltage(rightVolts);
+    setVoltage(leftVolts, rightVolts);
+  }
+
+  public void stop() {
+    runOpenLoop(0.0, 0.0);
   }
 }

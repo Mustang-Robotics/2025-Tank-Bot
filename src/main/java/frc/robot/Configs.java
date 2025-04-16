@@ -49,8 +49,7 @@ public final class Configs {
                 .positionConversionFactor(2*Math.PI / 8.46)
                 .velocityConversionFactor(2*Math.PI / 60 / 8.46)
                 .uvwMeasurementPeriod(10)
-                .uvwAverageDepth(2)
-                .inverted(true);
+                .uvwAverageDepth(2);
 
             rightLeadConfig
                 .closedLoop
@@ -63,7 +62,6 @@ public final class Configs {
                 .idleMode(IdleMode.kBrake)
                 .smartCurrentLimit(30)
                 .voltageCompensation(12)
-                .inverted(true)
                 .follow(33);
             
         }

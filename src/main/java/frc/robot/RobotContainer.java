@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ArcadeDrive;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -31,8 +32,7 @@ public class RobotContainer {
   
   private void configureBindings() {
     m_drive.setDefaultCommand(
-        ArcadeDrive(
-            m_drive, () -> -m_driverController.getLeftY(), () -> -m_drivercontroller.getRightX()));
+        new ArcadeDrive(m_drive,() -> -m_driverController.getLeftY(),() -> -m_driverController.getRightX()));
   }
 
 

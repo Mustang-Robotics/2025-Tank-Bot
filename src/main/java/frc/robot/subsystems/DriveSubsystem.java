@@ -5,12 +5,16 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkBase.ControlType;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
@@ -29,8 +33,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final SparkMax m_rightFollower =  new SparkMax(34, MotorType.kBrushless);
   private final RelativeEncoder leftEncoder = m_leftLeader.getEncoder();
   private final RelativeEncoder rightEncoder = m_rightLeader.getEncoder();
-  private final SparkClosedLoopController leftController = leftLeader.getClosedLoopController();
-  private final SparkClosedLoopController rightController = rightLeader.getClosedLoopController();
+  private final SparkClosedLoopController leftController = m_leftLeader.getClosedLoopController();
+  private final SparkClosedLoopController rightController = m_rightLeader.getClosedLoopController();
   
   double wheelRadiusMeters = Units.inchesToMeters(3);
   double trackWidth = .557;
@@ -78,13 +82,13 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putData("pose", m_pose);
     m_odometry.update(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
-        getLeftPositionMeters,
-        getRightPositionMeters);
+        getLeftPositionMeters(),
+        getRightPositionMeters());
   }
 
   public void setVoltage(double leftVolts, double rightVolts) {
-    leftLeader.setVoltage(leftVolts);
-    rightLeader.setVoltage(rightVolts);
+    m_leftLeader.setVoltage(leftVolts);
+    m_rightLeader.setVoltage(rightVolts);
   }
 
   public void setVelocity(double leftRadPerSec, double rightRadPerSec) {
@@ -127,7 +131,9 @@ public class DriveSubsystem extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
-        getLeftPositionMeters,
-        getRightPositionMeters,
+        getLeftPositionMeters(),
+        getRightPositionMeters(),
         pose);
+  }
+
 }

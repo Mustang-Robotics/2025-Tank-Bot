@@ -79,6 +79,9 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("angle", m_gyro.getAngle(IMUAxis.kZ));
     m_pose.setRobotPose(m_odometry.getEstimatedPosition());
+    SmartDashboard.putNumber("X", m_pose.getRobotPose().getMeasureX().baseUnitMagnitude());
+    SmartDashboard.putNumber("Y", m_pose.getRobotPose().getMeasureY().baseUnitMagnitude());
+    SmartDashboard.putNumber("Rotation", m_pose.getRobotPose().getRotation().getDegrees());
     SmartDashboard.putData("pose", m_pose);
     m_odometry.update(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),

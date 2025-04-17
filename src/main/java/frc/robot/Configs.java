@@ -29,7 +29,7 @@ public final class Configs {
                 .closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .pid(0.04, 0, 0)
-                .velocityFF(0)
+                .velocityFF(1/5.35372)
                 .outputRange(-1, 1);
 
             leftFollowConfig
@@ -55,7 +55,7 @@ public final class Configs {
                 .closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .pid(0.04, 0, 0)
-                .velocityFF(0)
+                .velocityFF(1/5.35372)
                 .outputRange(-1, 1);
 
             rightFollowConfig

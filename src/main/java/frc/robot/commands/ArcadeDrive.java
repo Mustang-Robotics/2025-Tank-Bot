@@ -29,6 +29,6 @@ public class ArcadeDrive extends Command{
 
       var speeds = DifferentialDrive.arcadeDriveIK(x, z, true);
       
-      m_drive.runOpenLoop(speeds.left * maxSpeedMetersPerSec, speeds.right * maxSpeedMetersPerSec);
+      m_drive.runOpenLoop(speeds.left * maxSpeedMetersPerSec * 2.2, speeds.right * maxSpeedMetersPerSec * 2.2);
     }
 }

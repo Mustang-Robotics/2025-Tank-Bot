@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPLTVController;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -14,16 +16,23 @@ import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Configs;
+import frc.robot.Constants.AutoConfig;
 
 public class DriveSubsystem extends SubsystemBase {
   
@@ -46,7 +55,9 @@ public class DriveSubsystem extends SubsystemBase {
   public Pose2d initialPosition = new Pose2d();
   private final DifferentialDrivePoseEstimator m_odometry = 
     new DifferentialDrivePoseEstimator(kinematics, Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)), 0.0, 0.0, initialPosition);
-
+  private final Vector<N3> qelems = VecBuilder.fill(0.0625, 0.125, .125);
+  private final Vector<N2> relems = VecBuilder.fill(.5, 1);
+  public Vision vision = new Vision();
   
   public DriveSubsystem() {
     
@@ -72,6 +83,23 @@ public class DriveSubsystem extends SubsystemBase {
 
     leftEncoder.setPosition(0);
     rightEncoder.setPosition(0);
+
+    AutoBuilder.configure(
+    this::getPose, // Robot pose supplier
+    this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+    this::getRobotRelaviteSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+    (ChassisSpeeds speeds) -> runClosedLoop(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+    new PPLTVController(qelems, relems, 0.2, 3.2),
+    AutoConfig.config,
+    () -> {
+      var alliance = DriverStation.getAlliance();
+      if(alliance.isPresent()) {
+        return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+    },
+    this // Reference to this subsystem to set requirements
+  );
     
   }
 
@@ -87,6 +115,13 @@ public class DriveSubsystem extends SubsystemBase {
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
         getLeftPositionMeters(),
         getRightPositionMeters());
+
+    var visionBottomEst = vision.getBottomEstimatedGlobalPose();
+    visionBottomEst.ifPresent(
+      est -> {
+        var estStdDevs = vision.getEstimationStdDevs();
+        m_odometry.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+    });
   }
 
   public void setVoltage(double leftVolts, double rightVolts) {
@@ -137,6 +172,19 @@ public class DriveSubsystem extends SubsystemBase {
         getLeftPositionMeters(),
         getRightPositionMeters(),
         pose);
+  }
+
+  public double getLeftVelocityMPS() {
+    return leftEncoder.getVelocity() * wheelRadiusMeters;
+  }
+
+  public double getRightVelocityMPS() {
+    return rightEncoder.getVelocity() * wheelRadiusMeters;
+  }
+
+  public ChassisSpeeds getRobotRelaviteSpeeds() {
+    DifferentialDriveWheelSpeeds speeds = new DifferentialDriveWheelSpeeds(getLeftVelocityMPS(), getRightVelocityMPS());
+    return kinematics.toChassisSpeeds(speeds);
   }
 
 }

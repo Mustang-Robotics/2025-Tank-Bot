@@ -50,8 +50,8 @@ public final class Constants {
     public static final double kNeoKv = 5676 / 12;
     public static final double kDrivingMotorFreeSpeedRps = kNeoFreeSpeed / 60;
     public static final double kDrivingMotorReduction = 8.46;
-    public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
-      / kDrivingMotorReduction;
+    public static final double kDriveWheelFreeSpeedRps = 
+    (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters) / kDrivingMotorReduction;
     public static final double kMaxSpeedMetersPerSec = 3.2;
     public static final double kVoltPerSpeed = kDrivingMotorReduction * 60 / (kNeoKv * 2 * Math.PI * kWheelRadiusMeters);
 

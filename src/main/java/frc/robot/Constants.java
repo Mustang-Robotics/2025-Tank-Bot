@@ -59,7 +59,7 @@ public final class Constants {
   }
 
   public static final class AutoConfig {
-    public static final Vector<N3> qelems = VecBuilder.fill(0.0625, 0.125, .125);
+    public static final Vector<N3> qelems = VecBuilder.fill(0.0625, 0.0625, .0625);
     public static final Vector<N2> relems = VecBuilder.fill(.5, 1); 
     public static RobotConfig config;
       static {

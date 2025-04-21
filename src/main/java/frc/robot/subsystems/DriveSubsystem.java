@@ -17,11 +17,6 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.numbers.N2;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
@@ -33,21 +28,20 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Configs;
 import frc.robot.Constants.AutoConfig;
+import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
   
-  private final SparkMax m_leftLeader =  new SparkMax(31, MotorType.kBrushless);
-  private final SparkMax m_leftFollower =  new SparkMax(32, MotorType.kBrushless);
-  private final SparkMax m_rightLeader =  new SparkMax(33, MotorType.kBrushless);
-  private final SparkMax m_rightFollower =  new SparkMax(34, MotorType.kBrushless);
+  private final SparkMax m_leftLeader =  new SparkMax(DriveConstants.kLeftLeader, MotorType.kBrushless);
+  private final SparkMax m_leftFollower =  new SparkMax(DriveConstants.kLeftFollower, MotorType.kBrushless);
+  private final SparkMax m_rightLeader =  new SparkMax(DriveConstants.kRightLeader, MotorType.kBrushless);
+  private final SparkMax m_rightFollower =  new SparkMax(DriveConstants.kRightFollower, MotorType.kBrushless);
   private final RelativeEncoder leftEncoder = m_leftLeader.getEncoder();
   private final RelativeEncoder rightEncoder = m_rightLeader.getEncoder();
   private final SparkClosedLoopController leftController = m_leftLeader.getClosedLoopController();
   private final SparkClosedLoopController rightController = m_rightLeader.getClosedLoopController();
   
-  double wheelRadiusMeters = Units.inchesToMeters(3);
-  double trackWidth = .557;
-  private final DifferentialDriveKinematics kinematics =new DifferentialDriveKinematics(trackWidth);
+  private final DifferentialDriveKinematics kinematics =new DifferentialDriveKinematics(DriveConstants.kTrackwidth);
   
   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
@@ -55,8 +49,6 @@ public class DriveSubsystem extends SubsystemBase {
   public Pose2d initialPosition = new Pose2d();
   private final DifferentialDrivePoseEstimator m_odometry = 
     new DifferentialDrivePoseEstimator(kinematics, Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)), 0.0, 0.0, initialPosition);
-  private final Vector<N3> qelems = VecBuilder.fill(0.0625, 0.125, .125);
-  private final Vector<N2> relems = VecBuilder.fill(.5, 1);
   public Vision vision = new Vision();
   
   public DriveSubsystem() {
@@ -89,7 +81,7 @@ public class DriveSubsystem extends SubsystemBase {
     this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
     this::getRobotRelaviteSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
     (ChassisSpeeds speeds) -> runClosedLoop(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-    new PPLTVController(qelems, relems, 0.2, 3.2),
+    new PPLTVController(AutoConfig.qelems, AutoConfig.relems, 0.2, 3.2),
     AutoConfig.config,
     () -> {
       var alliance = DriverStation.getAlliance();
@@ -140,8 +132,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void runClosedLoop(double leftMetersPerSec, double rightMetersPerSec) {
-    double leftRadPerSec = leftMetersPerSec / wheelRadiusMeters;
-    double rightRadPerSec = rightMetersPerSec / wheelRadiusMeters;
+    double leftRadPerSec = leftMetersPerSec / DriveConstants.kWheelRadiusMeters;
+    double rightRadPerSec = rightMetersPerSec / DriveConstants.kWheelRadiusMeters;
 
     setVelocity(leftRadPerSec, rightRadPerSec);
   }
@@ -155,11 +147,11 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getLeftPositionMeters() {
-    return leftEncoder.getPosition() * wheelRadiusMeters;
+    return leftEncoder.getPosition() * DriveConstants.kWheelRadiusMeters;
   }
 
   public double getRightPositionMeters() {
-    return rightEncoder.getPosition() * wheelRadiusMeters;
+    return rightEncoder.getPosition() * DriveConstants.kWheelRadiusMeters;
   }
 
   public Pose2d getPose() {
@@ -175,11 +167,11 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getLeftVelocityMPS() {
-    return leftEncoder.getVelocity() * wheelRadiusMeters;
+    return leftEncoder.getVelocity() * DriveConstants.kWheelRadiusMeters;
   }
 
   public double getRightVelocityMPS() {
-    return rightEncoder.getVelocity() * wheelRadiusMeters;
+    return rightEncoder.getVelocity() * DriveConstants.kWheelRadiusMeters;
   }
 
   public ChassisSpeeds getRobotRelaviteSpeeds() {

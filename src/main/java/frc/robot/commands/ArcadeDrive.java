@@ -5,14 +5,14 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class ArcadeDrive extends Command{
     DriveSubsystem m_drive;
-    private static final double DEADBAND = 0.1;
     DoubleSupplier m_xSupplier;
     DoubleSupplier m_zSupplier;
-    double maxSpeedMetersPerSec = 3.2;
   
     public ArcadeDrive(DriveSubsystem drive, DoubleSupplier xSupplier, DoubleSupplier zSupplier){
       m_drive = drive;
@@ -24,11 +24,11 @@ public class ArcadeDrive extends Command{
 
     @Override
     public void execute(){
-      double x = MathUtil.applyDeadband(m_xSupplier.getAsDouble(), DEADBAND);
-      double z = MathUtil.applyDeadband(m_zSupplier.getAsDouble(), DEADBAND);
+      double x = MathUtil.applyDeadband(m_xSupplier.getAsDouble(), OperatorConstants.kDeadband);
+      double z = MathUtil.applyDeadband(m_zSupplier.getAsDouble(), OperatorConstants.kDeadband);
 
       var speeds = DifferentialDrive.arcadeDriveIK(x, z, true);
       
-      m_drive.runOpenLoop(speeds.left * maxSpeedMetersPerSec * 2.2, speeds.right * maxSpeedMetersPerSec * 2.2);
+      m_drive.runOpenLoop(speeds.left * DriveConstants.kMaxSpeedMetersPerSec * DriveConstants.kVoltPerSpeed, speeds.right * DriveConstants.kMaxSpeedMetersPerSec * DriveConstants.kVoltPerSpeed);
     }
 }

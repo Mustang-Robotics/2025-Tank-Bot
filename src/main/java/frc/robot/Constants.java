@@ -6,8 +6,6 @@ package frc.robot;
 
 import com.pathplanner.lib.config.RobotConfig;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -47,11 +45,11 @@ public final class Constants {
     public static final double kWheelRadiusMeters = Units.inchesToMeters(3);
     public static final double kWheelCircumferenceMeters = kWheelRadiusMeters * 2 * Math.PI;
     public static final double kNeoFreeSpeed = 5676;
-    public static final double kNeoKv = 5676 / 12;
+    public static final double kNeoKv = kNeoFreeSpeed / 12;
     public static final double kDrivingMotorFreeSpeedRps = kNeoFreeSpeed / 60;
     public static final double kDrivingMotorReduction = 8.46;
-    public static final double kDriveWheelFreeSpeedRps = 
-    (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters) / kDrivingMotorReduction;
+    public static final double kDriveWheelFreeSpeed = 
+      (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters) / kDrivingMotorReduction;
     public static final double kMaxSpeedMetersPerSec = 3.2;
     public static final double kVoltPerSpeed = kDrivingMotorReduction * 60 / (kNeoKv * 2 * Math.PI * kWheelRadiusMeters);
 
@@ -78,14 +76,11 @@ public final class Constants {
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToTagCam =
             new Transform3d(new Translation3d(0.3397, 0, 0.1873), new Rotation3d(0, 0.4887, 0));
-
-    public static final AprilTagFieldLayout kTagLayout =
-            AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(.5, .5, 2);
-    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.25, .25, .5);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(.5, .5, .5);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.25, .25, .25);
 }
 }

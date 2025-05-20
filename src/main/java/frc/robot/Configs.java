@@ -32,7 +32,7 @@ public final class Configs {
                 .closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .pid(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD)
-                .velocityFF(1/DriveConstants.kDriveWheelFreeSpeedRps)
+                .velocityFF(1/DriveConstants.kDriveWheelFreeSpeed)
                 .outputRange(-1, 1);
 
             leftFollowConfig
@@ -58,7 +58,7 @@ public final class Configs {
                 .closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .pid(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD)
-                .velocityFF(1/DriveConstants.kDriveWheelFreeSpeedRps)
+                .velocityFF(1/DriveConstants.kDriveWheelFreeSpeed)
                 .outputRange(-1, 1);
 
             rightFollowConfig

@@ -26,14 +26,18 @@
 
  import static frc.robot.Constants.Vision.*;
  import frc.robot.Robot;
- import edu.wpi.first.math.Matrix;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.Matrix;
  import edu.wpi.first.math.VecBuilder;
  import edu.wpi.first.math.geometry.Pose2d;
  import edu.wpi.first.math.geometry.Rotation2d;
  import edu.wpi.first.math.numbers.N1;
  import edu.wpi.first.math.numbers.N3;
- import edu.wpi.first.wpilibj.smartdashboard.Field2d;
- import java.util.List;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+
+import java.io.File;
+import java.util.List;
  import java.util.Optional;
  import org.photonvision.EstimatedRobotPose;
  import org.photonvision.PhotonCamera;
@@ -48,7 +52,7 @@
      private final PhotonCamera tagCamera;
      private final PhotonPoseEstimator photonTagPoseEstimator;
      private Matrix<N3, N1> curStdDevs;
- 
+     private AprilTagFieldLayout kTagLayout;
      // Simulation
      private PhotonCameraSim cameraSim;
      private VisionSystemSim visionSim;
@@ -56,6 +60,12 @@
      public Vision() {
          tagCamera = new PhotonCamera(kTagCamera);
          //topCamera = new PhotonCamera(kTopCamera);
+
+         try {
+            kTagLayout = new AprilTagFieldLayout(new File(Filesystem.getDeployDirectory(), "fieldlayout/2025-minne-trials.json").toString());
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
  
          photonTagPoseEstimator =
                  new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToTagCam);

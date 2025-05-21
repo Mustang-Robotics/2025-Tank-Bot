@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start to Hoop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Back Away from Hoop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Get Ball"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Back to Start"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start to Hoop"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

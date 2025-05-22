@@ -62,31 +62,31 @@ public final class Constants {
     
   }
 
+  //Constants related to pathplanner
   public static final class AutoConfig {
-    public static final Vector<N3> qelems = VecBuilder.fill(0.0625, 0.0625, .0625);
-    public static final Vector<N2> relems = VecBuilder.fill(.5, 1); 
+    public static final Vector<N3> qelems = VecBuilder.fill(0.0625, 0.0625, .0625); //these and the next ones are related to acceptable error in the path see the link below for more info
+    public static final Vector<N2> relems = VecBuilder.fill(.5, 1); //more info here https://docs.wpilib.org/en/stable/docs/software/advanced-controls/state-space/state-space-intro.html#lqr-tuning
+    //adds the robot settings from the pathplanner app
     public static RobotConfig config;
       static {
-      try{
+      try{ //try/catch is necessary because if the settings don't exist there is no way of doing the following line of code
         config = RobotConfig.fromGUISettings();
       } catch (Exception e) {
-        //Handle exception as needed
-        e.printStackTrace();
+        e.printStackTrace(); //tells you if the try statement failed
       }
     }
   }
 
+  //constants related to photonvision
   public static class Vision {
-    public static final String kTagCamera = "Main";
+    public static final String kTagCamera = "Main"; //name of camera that we are using. This is set here: http://photonvision.local:5800/#/dashboard
 
-    // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-    public static final Transform3d kRobotToTagCam =
-            new Transform3d(new Translation3d(0.3397, 0, 0.1873), new Rotation3d(0, 0.4887, 0));
+    public static final Transform3d kRobotToTagCam = //sets the location on the robot relative to the center x=forward/backward y=left/right z=up from floor 
+            new Transform3d(new Translation3d(0.3397, 0, 0.1873), new Rotation3d(0, 0.4887, 0)); //Looking at a picture of roll/pitch/yaw will be more helpful than a description
     
 
-    // The standard deviations of our vision estimated poses, which affect correction rate
-    // (Fake values. Experiment and determine estimation noise on an actual robot.)
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(.25, .25, .25);
-    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.125, .125, .125);
+    //These two set how much we want to trust our vision measurements. Lower value = more trust
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(.25, .25, .25); //for when only one tag is seen
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.125, .125, .125); //for when multiple tags are seen. We usually trust this more because it is giving more data
 }
 }

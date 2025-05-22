@@ -1,0 +1,55 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+See Below this for what would go in the config file for this example
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+package frc.robot.subsystems;
+
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Configs;
+
+public class Intake extends SubsystemBase {
+  /** Creates a new Intake. */
+
+  private final SparkMax m_intake = new SparkMax(6, MotorType.kBrushless);
+  public Intake() {
+
+    m_intake.configure(
+      Configs.Intake.intakeConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
+
+  }
+
+  //Sets the intake speed
+  public void setIntakeSpeed(double speed) {
+    m_intake.set(speed);
+  }
+
+  public double getIntakeCurrent() {
+    return m_intake.getOutputCurrent();
+  }
+
+ 
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+CONFIG FILE STUFF
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ public static final class Intake {
+        public static final SparkMaxConfig intakeConfig = new SparkMaxConfig();
+
+        static {
+                intakeConfig
+                .idleMode(IdleMode.kBrake)
+                .smartCurrentLimit(60)
+                .inverted(true);
+        }
+    }

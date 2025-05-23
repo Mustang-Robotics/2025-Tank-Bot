@@ -46,6 +46,7 @@ public class RobotContainer {
     m_drive.setDefaultCommand(
         new ArcadeDrive(m_drive,() -> -m_driverController.getLeftY(),() -> -m_driverController.getRightX())); //using arcade drive command. telling which controller buttons are inputs
   }
+  
 
   //making a command to call autonomous in Robot.java nothing else needs to be done here if we are just using pathplanner
   public Command getAutonomousCommand() {

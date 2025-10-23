@@ -74,6 +74,34 @@ public final class Configs {
                 .follow(DriveConstants.kRightLeader);
             
         }
+
+    }
+
+    public static final class Shooter {
+        public static final SparkMaxConfig ShooterConfig = new SparkMaxConfig();
+
+        static {
+                ShooterConfig
+                .idleMode(IdleMode.kBrake)
+                .smartCurrentLimit(60)
+                .inverted(true);
+
+                ShooterConfig
+                .encoder
+                .positionConversionFactor(1)
+                .velocityConversionFactor(1);
+
+                ShooterConfig
+                .closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .p(.00005)
+                .i(.00001)
+                .outputRange(-1, 1)
+                .maxMotion
+                .maxVelocity(4000)
+                .maxAcceleration(5000)
+                .allowedClosedLoopError(5);
+        }
     }
 
     //Add new subsystems here. Use formatting style from above

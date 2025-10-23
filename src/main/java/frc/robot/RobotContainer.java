@@ -14,18 +14,21 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_drive = new DriveSubsystem();
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -45,7 +48,8 @@ public class RobotContainer {
   private void configureBindings() {
     m_drive.setDefaultCommand(
         new ArcadeDrive(m_drive,() -> -m_driverController.getLeftY(),() -> -m_driverController.getRightX())); //using arcade drive command. telling which controller buttons are inputs
-  }
+        m_driverController.a().whileTrue(new StartEndCommand(() -> m_shooter.setSpeed(2500), () -> m_shooter.setSpeed(0), m_shooter));
+      }
   
 
   //making a command to call autonomous in Robot.java nothing else needs to be done here if we are just using pathplanner

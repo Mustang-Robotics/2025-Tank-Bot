@@ -43,7 +43,7 @@ import java.util.List;
          //Change name of field in child: to load the correct field/////////////////////////////////////////////////////
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
          try {
-            kTagLayout = new AprilTagFieldLayout(new File(Filesystem.getDeployDirectory(), "fieldlayout/2024-minne-trials.json").toString()); 
+            kTagLayout = new AprilTagFieldLayout(new File(Filesystem.getDeployDirectory(), "fieldlayout/2025-minne-trials.json").toString()); 
          } catch (Exception e) {
             e.printStackTrace();
          }

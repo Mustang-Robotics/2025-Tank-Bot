@@ -10,13 +10,15 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 
 public class ShooterSubsystem extends SubsystemBase {
+    private final SparkMax m_index = new SparkMax(7, MotorType.kBrushed);
     private final SparkMax m_Shooter = new SparkMax(9, MotorType.kBrushless);
     private double targetSpeed = 0; 
-    private RelativeEncoder shooterEncoder = m_Shooter.getEncoder();
+    public RelativeEncoder shooterEncoder = m_Shooter.getEncoder();
     private SparkClosedLoopController shooterClosedLoopController = m_Shooter.getClosedLoopController();
     public ShooterSubsystem(){
         m_Shooter.configure(
@@ -24,11 +26,19 @@ public class ShooterSubsystem extends SubsystemBase {
             ResetMode.kResetSafeParameters,
             PersistMode.kPersistParameters);
             shooterEncoder.setPosition(0);
+  
+    }
+    public Command index(){
+      return this.run(() -> m_index.set(0.3));
+
+    }
+    public Command indexOff(){
+      return this.run(() -> m_index.set(0));
 
     }
 
     public void setSpeed(double speed){
-       targetSpeed = speed;
+      targetSpeed = speed;
 
     }
 

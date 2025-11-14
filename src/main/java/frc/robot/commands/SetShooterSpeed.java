@@ -22,6 +22,6 @@ public class SetShooterSpeed extends Command {
 
     @Override
     public boolean isFinished() {
-        return MathUtil.isNear(m_setpoint,m_shooter.shooterEncoder.getPosition(),5);
+        return MathUtil.isNear(m_setpoint,m_shooter.shooterEncoder.getVelocity(),200);
     }
 }

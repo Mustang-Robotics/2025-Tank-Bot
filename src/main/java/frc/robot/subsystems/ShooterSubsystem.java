@@ -21,6 +21,11 @@ public class ShooterSubsystem extends SubsystemBase {
     public RelativeEncoder shooterEncoder = m_Shooter.getEncoder();
     private SparkClosedLoopController shooterClosedLoopController = m_Shooter.getClosedLoopController();
     public ShooterSubsystem(){
+        m_index.configure(
+          Configs.Shooter.IndexerConfig,
+          ResetMode.kResetSafeParameters,
+          PersistMode.kPersistParameters);
+        
         m_Shooter.configure(
             Configs.Shooter.ShooterConfig,
             ResetMode.kResetSafeParameters,
@@ -29,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase {
   
     }
     public Command index(){
-      return this.run(() -> m_index.set(0.3));
+      return this.run(() -> m_index.set(0.6));
 
     }
     public Command indexOff(){

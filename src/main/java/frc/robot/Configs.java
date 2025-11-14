@@ -79,10 +79,11 @@ public final class Configs {
 
     public static final class Shooter {
         public static final SparkMaxConfig ShooterConfig = new SparkMaxConfig();
+        public static final SparkMaxConfig IndexerConfig = new SparkMaxConfig();
 
         static {
                 ShooterConfig
-                .idleMode(IdleMode.kBrake)
+                .idleMode(IdleMode.kCoast)
                 .smartCurrentLimit(60)
                 .inverted(true);
 
@@ -94,14 +95,19 @@ public final class Configs {
                 ShooterConfig
                 .closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .p(.00005)
-                .i(.00001)
+                .pidf(0.000001,0,0,0.0001775)
                 .outputRange(-1, 1)
                 .maxMotion
-                .maxVelocity(4000)
-                .maxAcceleration(5000)
-                .allowedClosedLoopError(5);
+                .maxVelocity(5800)
+                .maxAcceleration(20000)
+                .allowedClosedLoopError(25);
+        
+                IndexerConfig
+                .idleMode(IdleMode.kBrake)
+                .smartCurrentLimit(20)
+                .inverted(true);
         }
+
     }
 
     //Add new subsystems here. Use formatting style from above

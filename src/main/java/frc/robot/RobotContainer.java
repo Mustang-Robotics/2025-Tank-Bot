@@ -22,8 +22,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 
@@ -49,12 +49,11 @@ public class RobotContainer {
   //method to configure trigger bindings any thing we want the robot to do based on some state (button press, or sensor value) should go in here
   private void configureBindings() {
     
-    m_driverController.rightTrigger().onTrue(new SetShooterSpeed(m_shooter, 1000).andThen(m_shooter.index())); 
-    m_driverController.rightTrigger().onFalse(new SetShooterSpeed(m_shooter, 0).andThen(m_shooter.indexOff()));
+    m_driverController.rightTrigger().onTrue(new SequentialCommandGroup(new SetShooterSpeed(m_shooter, 5250), (m_shooter.index()))); 
+    m_driverController.rightTrigger().onFalse(new SequentialCommandGroup(new SetShooterSpeed(m_shooter, 0), (m_shooter.indexOff())));
 
     m_drive.setDefaultCommand(
         new ArcadeDrive(m_drive,() -> -m_driverController.getLeftY(),() -> -m_driverController.getRightX())); //using arcade drive command. telling which controller buttons are inputs
-        m_driverController.a().whileTrue(new StartEndCommand(() -> m_shooter.setSpeed(2500), () -> m_shooter.setSpeed(0), m_shooter));
       }
   
 

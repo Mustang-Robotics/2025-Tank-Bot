@@ -38,10 +38,10 @@ public final class Constants {
   //constants related to the drivesystem
   public static final class DriveConstants {
 
-    public static final int kLeftLeader = 31; //CAN ID of LeftLeader Motor. Used in DriveSubsystem
-    public static final int kLeftFollower = 32; //CAN ID of LeftFollower Motor. Used in DriveSubsystem
-    public static final int kRightLeader = 33; //CAN ID of RightLeader Motor. Used in DriveSubsystem
-    public static final int kRightFollower = 34; //CAN ID of RightFollower Motor. Used in DriveSubsystem
+    public static final int kLeftLeader = 33; //CAN ID of LeftLeader Motor. Used in DriveSubsystem
+    public static final int kLeftFollower = 34; //CAN ID of LeftFollower Motor. Used in DriveSubsystem
+    public static final int kRightLeader = 31; //CAN ID of RightLeader Motor. Used in DriveSubsystem
+    public static final int kRightFollower = 32; //CAN ID of RightFollower Motor. Used in DriveSubsystem
     public static final int kStallCurrent = 30; //Maximum amount of current that will get sent to a motor. Used in Configs
     //The following numbers get used in calculations to help tune the speed of the drivetrain
     public static final double kP = 0.0465; //Proportional Gain See Constants for explanation
@@ -82,7 +82,7 @@ public final class Constants {
     public static final String kTagCamera = "Main"; //name of camera that we are using. This is set here: http://photonvision.local:5800/#/dashboard
 
     public static final Transform3d kRobotToTagCam = //sets the location on the robot relative to the center x=forward/backward y=left/right z=up from floor 
-            new Transform3d(new Translation3d(0.3397, 0, 0.1873), new Rotation3d(0, 0.4887, 0)); //Looking at a picture of roll/pitch/yaw will be more helpful than a description
+            new Transform3d(new Translation3d(0.2286, 0.1746, 0.5429), new Rotation3d(0, 0, -0.5236)); //Looking at a picture of roll/pitch/yaw will be more helpful than a description
     
 
     //These two set how much we want to trust our vision measurements. Lower value = more trust

@@ -33,12 +33,12 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterEncoder.setPosition(0);
   
     }
-    public Command index(){
-      return this.run(() -> m_index.set(0.6));
+    public void index(){
+      m_index.set(0.6);
 
     }
-    public Command indexOff(){
-      return this.run(() -> m_index.set(0));
+    public void indexOff(){
+      m_index.set(0);
 
     }
 

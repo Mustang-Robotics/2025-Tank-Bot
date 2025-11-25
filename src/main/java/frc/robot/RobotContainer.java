@@ -13,16 +13,18 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.IndexOff;
+import frc.robot.commands.IndexOn;
 import frc.robot.commands.SetShooterSpeed;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -41,6 +43,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    NamedCommands.registerCommand("Shoot", new SequentialCommandGroup(new SetShooterSpeed(m_shooter, 5250), new IndexOn(m_shooter)));
+    NamedCommands.registerCommand("ShootOff", new SequentialCommandGroup(new SetShooterSpeed(m_shooter, 0), new IndexOff(m_shooter)));
     configureBindings(); //this is a method created below, we are running it here to define the triggers for commands
     m_chooser = AutoBuilder.buildAutoChooser(); //the chooser created above gets defined to select between pathplanner autos
     SmartDashboard.putData("Auto Chooser", m_chooser); //adding the chooser to shuffleboard
@@ -49,8 +53,8 @@ public class RobotContainer {
   //method to configure trigger bindings any thing we want the robot to do based on some state (button press, or sensor value) should go in here
   private void configureBindings() {
     
-    m_driverController.rightTrigger().onTrue(new SequentialCommandGroup(new SetShooterSpeed(m_shooter, 5250), (m_shooter.index()))); 
-    m_driverController.rightTrigger().onFalse(new SequentialCommandGroup(new SetShooterSpeed(m_shooter, 0), (m_shooter.indexOff())));
+    m_driverController.rightTrigger().onTrue(new SequentialCommandGroup(new SetShooterSpeed(m_shooter, 5250), new IndexOn(m_shooter))); 
+    m_driverController.rightTrigger().onFalse(new SequentialCommandGroup(new SetShooterSpeed(m_shooter, 0), new IndexOff(m_shooter)));
 
     m_drive.setDefaultCommand(
         new ArcadeDrive(m_drive,() -> -m_driverController.getLeftY(),() -> -m_driverController.getRightX())); //using arcade drive command. telling which controller buttons are inputs
